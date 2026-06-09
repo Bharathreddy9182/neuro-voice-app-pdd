@@ -1,7 +1,7 @@
 import { create } from "axios";
 
 const API = create({
-  baseURL: "http://192.168.2.8:5000",
+  baseURL: "https://neurovoicecompanion-production.up.railway.app",
   headers: {
     "Content-Type": "application/json",
   },
