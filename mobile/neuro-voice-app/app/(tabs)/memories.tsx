@@ -50,28 +50,69 @@ export default function MemoriesScreen() {
     }
   };
 
-  const addMemory = async () => {
-    if (!memoryText.trim()) {
-      Alert.alert("Validation", "Please enter a memory.");
-      return;
-    }
+const addMemory = async () => {
+  if (!memoryText.trim()) {
+    Alert.alert("Validation", "Please enter a memory.");
+    return;
+  }
 
-    try {
-      const userData = await AsyncStorage.getItem("user");
-      const user = JSON.parse(userData || "{}");
+  try {
+    console.log("STEP 1");
 
-      await API.post("/memories", {
-        user_id: user.id,
-        memory_text: memoryText.trim(),
-      });
+    const userData = await AsyncStorage.getItem("user");
+    const user = JSON.parse(userData || "{}");
 
-      setMemoryText("");
-      loadMemories();
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Unable to save memory.");
-    }
-  };
+    console.log("USER:", user);
+
+    console.log("STEP 2");
+
+const response = await fetch(
+  "https://neurovoicecompanion-production.up.railway.app/memories",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_id: user.id,
+      memory_text: memoryText.trim(),
+    }),
+  }
+);
+
+const data = await response.json();
+
+console.log("FETCH DATA:", data);
+
+    console.log("STEP 3 - POST SUCCESS");
+    // console.log("RESPONSE:", response.data);
+
+    setMemoryText("");
+
+    console.log("STEP 4 - BEFORE LOAD");
+
+    await loadMemories();
+
+    console.log("STEP 5 - LOAD SUCCESS");
+
+    Alert.alert("Success", "Memory saved successfully.");
+  } catch (error: any) {
+  console.log("MESSAGE:", error?.message);
+  console.log("CODE:", error?.code);
+  console.log("STATUS:", error?.response?.status);
+  console.log("DATA:", error?.response?.data);
+  console.log("REQUEST:", error?.request);
+
+  Alert.alert(
+    "Debug",
+    JSON.stringify({
+      message: error?.message,
+      code: error?.code,
+      status: error?.response?.status,
+    })
+  );
+}
+};
 
   const openEdit = (item: Memory) => {
     setEditingMemory(item);
