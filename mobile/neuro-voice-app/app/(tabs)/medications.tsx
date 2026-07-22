@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
 import API from "../../src/services/api";
-import { syncCareNotifications } from "../../src/services/notifications";
+// import { syncCareNotifications } from "../../src/services/notifications";
 
 type Medication = {
   id: number;
@@ -60,7 +60,7 @@ export default function MedicationsScreen() {
 
       const response = await API.get(`/medications/${user.id}`);
       setMedications(response.data);
-      syncCareNotifications({ medications: response.data });
+      // syncCareNotifications({ medications: response.data });
     } catch (error) {
       console.log(error);
     } finally {

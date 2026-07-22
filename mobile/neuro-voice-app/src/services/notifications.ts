@@ -1,5 +1,10 @@
 import { Platform } from "react-native";
-import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+
+const isWeb = Platform.OS === "web";
+const Notifications = isWeb
+  ? null
+  : require("expo-notifications") as typeof import("expo-notifications");
 
 type ReminderNotification = {
   id: number;
@@ -17,16 +22,33 @@ type MedicationNotification = {
   status?: string;
 };
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+if (Notifications) {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 export async function prepareNotifications() {
+  if (isWeb) {
+    console.log("Notifications are not supported in the browser web build");
+    return false;
+  }
+
+  if (!Notifications) {
+    console.log("Notifications module is unavailable on this platform");
+    return false;
+  }
+
+  if (Constants.appOwnership === "expo") {
+    console.log("Notifications are disabled in Expo Go");
+    return false;
+  }
+
   const permission = await Notifications.getPermissionsAsync();
 
   if (!permission.granted) {
@@ -55,6 +77,11 @@ export async function syncCareNotifications({
   reminders?: ReminderNotification[];
   medications?: MedicationNotification[];
 }) {
+  if (isWeb) {
+    console.log("Skipping notification sync on web");
+    return;
+  }
+
   const enabled = await prepareNotifications();
 
   if (!enabled) return;

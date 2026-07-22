@@ -50,12 +50,16 @@ export default function LoginScreen() {
 
         router.replace("/(tabs)/home");
       }
-    } catch (error: any) {
-      Alert.alert(
-        "Error",
-        error?.response?.data?.message || "Login failed"
-      );
-    }
+} catch (error: any) {
+  console.log("LOGIN ERROR:", error);
+  console.log("STATUS:", error?.response?.status);
+  console.log("DATA:", error?.response?.data);
+
+  Alert.alert(
+    "Login Failed",
+    JSON.stringify(error?.response?.data || error.message)
+  );
+}
   };
 
   return (
