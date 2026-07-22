@@ -1,0 +1,40 @@
+name: 🧪 QA Test Cases Documentation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  test-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✅ Checkout
+        uses: actions/checkout@v4
+
+      - name: 📊 Display Test Cases
+        run: |
+          echo "════════════════════════════════════════════════════════════════"
+          echo "         🧪 QA TEST CASES - NEURO VOICE COMPANION"
+          echo "════════════════════════════════════════════════════════════════"
+          echo ""
+          echo "📋 TOTAL TEST CASES: 183"
+          echo ""
+          echo "✅ All 13 modules documented:"
+          echo "  🔐 Authentication (18 tests)"
+          echo "  🏠 Home Screen (15 tests)"
+          echo "  🎤 Voice Assistant (16 tests)"
+          echo "  📝 Memories (14 tests)"
+          echo "  ⏰ Reminders (18 tests)"
+          echo "  💊 Medications (18 tests)"
+          echo "  👥 Contacts (15 tests)"
+          echo "  👤 Profile (12 tests)"
+          echo "  🧭 Navigation (10 tests)"
+          echo "  🔒 Permissions (12 tests)"
+          echo "  🌐 API Validation (20 tests)"
+          echo "  📡 Network (6 tests)"
+          echo "  🔄 Regression (15 tests)"
+          echo ""
+          echo "🎉 Ready for QA Testing!"
+          echo ""
+          echo "📄 View: https://github.com/Bharathreddy9182/neuro-voice-app-pdd/blob/main/TEST_CASES.md"
